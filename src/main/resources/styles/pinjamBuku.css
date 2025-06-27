@@ -1,0 +1,40 @@
+.root {
+    -fx-background-color: white;
+}
+
+.modal-card {
+    -fx-background-color: #efefef;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0.3, 0, 5);
+}
+
+.modal-title {
+    -fx-font-size: 22px;
+    -fx-text-fill: #2d4059;
+    -fx-font-weight: bold;
+}
+
+.modal-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: #455d7a;
+}
+
+.modal-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+.date-picker {
+    -fx-pref-width: 200px;
+}
+
+.btn-submit {
+    -fx-background-color: darkblue;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20 10 20;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+

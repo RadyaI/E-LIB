@@ -1,0 +1,62 @@
+.cool-table {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.04), 6, 0, 0, 2);
+}
+
+.cool-table .column-header-background {
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 8 8 0 0;
+}
+
+.cool-table .label {
+    -fx-text-fill: #212121;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.cool-table .column-header,
+.cool-table .filler {
+    -fx-size: 38px;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+.cool-table .table-cell {
+    -fx-font-size: 13.5px;
+    -fx-padding: 10 14 10 14;
+    -fx-text-fill: #333333;
+    -fx-border-color: transparent;
+}
+
+.cool-table .table-row-cell:filled:hover {
+    -fx-background-color: #f0f0f0;
+    -fx-cursor: hand;
+}
+
+.cool-table .table-row-cell:filled:selected,
+.cool-table .table-row-cell:focused:selected {
+    -fx-background-color: #d0d0ff;
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+}
+
+.btn-kembali {
+    -fx-background-color: #1a73e8;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 6 20 6 20;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+    -fx-border-color: transparent;
+}
+
+.btn-kembali:hover {
+    -fx-background-color: #1669d3;
+}
