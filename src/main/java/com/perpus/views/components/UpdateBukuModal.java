@@ -2,6 +2,7 @@ package com.perpus.views.components;
 
 import com.perpus.controllers.BukuController;
 import com.perpus.model.Buku;
+
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -9,6 +10,20 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+
+/*
+ =========================================================
+  FILE       : UpdateBukuModal.java
+  FITUR      : Modal Form Update Data Buku
+  FUNGSI     : - Menampilkan data buku yang ingin diperbarui
+               - Melakukan validasi dan update data
+  DIBUAT OLEH: - Muhammad Radya Iftikhar (202410370110370)
+               - Ramanda Bagus Prawobo (202410370110380)
+               - Athallah Rasyad Zaidan (202410370110361)
+               - Anggara Aribawa Paramesti (202410370110346)
+               - Rifky Septian Kusuma (202410370110351)
+ =========================================================
+*/
 
 public class UpdateBukuModal {
 
@@ -28,7 +43,7 @@ public class UpdateBukuModal {
         lblTitle.getStyleClass().add("modal-title");
 
         TextField tfKodeBuku = new TextField(buku.getKode_buku());
-        tfKodeBuku.setDisable(true);
+        tfKodeBuku.setDisable(true); // Tidak bisa diubah
         tfKodeBuku.getStyleClass().add("modal-textfield");
 
         TextField tfJudulBuku = new TextField(buku.getJudul_buku());
@@ -61,6 +76,7 @@ public class UpdateBukuModal {
                 return;
             }
 
+            // Update buku
             buku.setJudul_buku(judul);
             buku.setNama_penulis(penulis);
             buku.setTahun_terbit(tahun);
@@ -83,6 +99,7 @@ public class UpdateBukuModal {
 
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
+        alert.setHeaderText(null);
         alert.showAndWait();
     }
 }

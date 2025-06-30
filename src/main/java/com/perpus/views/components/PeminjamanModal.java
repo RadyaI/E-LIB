@@ -22,6 +22,21 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/*
+ =========================================================
+  FILE       : PeminjamanModal.java
+  FITUR      : Modal Daftar Buku yang Dipinjam
+  FUNGSI     : - Menampilkan buku yang sedang dipinjam oleh user
+               - Menghitung dan menampilkan denda berdasarkan keterlambatan
+               - Tombol pengembalian buku
+  DIBUAT OLEH: - Muhammad Radya Iftikhar (202410370110370)
+               - Ramanda Bagus Prawobo (202410370110380)
+               - Athallah Rasyad Zaidan (202410370110361)
+               - Anggara Aribawa Paramesti (202410370110346)
+               - Rifky Septian Kusuma (202410370110351)
+ =========================================================
+*/
+
 public class PeminjamanModal {
     private final Anggota user;
     private final PeminjamanController peminjamanController;
@@ -52,18 +67,22 @@ public class PeminjamanModal {
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         table.setPrefHeight(300);
 
+        // Kolom judul buku
         TableColumn<Peminjaman, String> judulCol = new TableColumn<>("Judul Buku");
         judulCol.setCellValueFactory(cellData -> {
             Buku buku = bukuController.cariBuku(cellData.getValue().getKode_buku());
             return new SimpleStringProperty(buku != null ? buku.getJudul_buku() : "Buku tidak ditemukan");
         });
 
+        // Kolom tanggal pinjam
         TableColumn<Peminjaman, LocalDate> tglPinjamCol = new TableColumn<>("Tanggal Pinjam");
         tglPinjamCol.setCellValueFactory(new PropertyValueFactory<>("tanggal_Peminjaman"));
 
+        // Kolom tanggal kembali
         TableColumn<Peminjaman, LocalDate> tglKembaliCol = new TableColumn<>("Tanggal Kembali");
         tglKembaliCol.setCellValueFactory(new PropertyValueFactory<>("tanggal_Kembali"));
 
+        // Kolom denda
         TableColumn<Peminjaman, String> dendaCol = new TableColumn<>("Denda");
         dendaCol.setCellValueFactory(cellData -> {
             LocalDate tglKembali = cellData.getValue().getTanggal_Kembali();
@@ -72,6 +91,7 @@ public class PeminjamanModal {
             return new SimpleStringProperty("Rp " + denda);
         });
 
+        // Kolom aksi: tombol kembalikan
         TableColumn<Peminjaman, Void> aksiCol = new TableColumn<>("Aksi");
         aksiCol.setCellFactory(col -> new TableCell<>() {
             private final Button btnKembali = new Button("Kembalikan");
@@ -103,8 +123,10 @@ public class PeminjamanModal {
             }
         });
 
+        // Tambah semua kolom ke tabel
         table.getColumns().addAll(judulCol, tglPinjamCol, tglKembaliCol, dendaCol, aksiCol);
 
+        // Filter data peminjaman milik user yang sedang login
         List<Peminjaman> semua = peminjamanController.getSemuaPeminjaman();
         ObservableList<Peminjaman> data = FXCollections.observableArrayList();
         for (Peminjaman p : semua) {

@@ -2,10 +2,7 @@ package com.perpus.views;
 
 import com.perpus.model.Anggota;
 import com.perpus.model.Buku;
-import com.perpus.views.components.AddBukuModal;
-import com.perpus.views.components.PeminjamanModal;
-import com.perpus.views.components.PinjamBukuModal;
-import com.perpus.views.components.UpdateBukuModal;
+import com.perpus.views.components.*;
 import com.perpus.controllers.BukuController;
 import com.perpus.controllers.PeminjamanController;
 
@@ -19,6 +16,22 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+/*
+ =========================================================
+  FILE       : DashboardView.java
+  FITUR      : Halaman utama setelah login
+  FUNGSI     : - Menampilkan daftar buku yang tersedia
+               - Fitur pinjam, tambah, edit, dan hapus buku
+               - Navigasi ke halaman profil dan logout
+               - Hanya admin (ID 123) yang bisa edit dan tambah buku
+  DIBUAT OLEH: - Muhammad Radya Iftikhar (202410370110370)
+               - Ramanda Bagus Prawobo (202410370110380)
+               - Athallah Rasyad Zaidan (202410370110361)
+               - Anggara Aribawa Paramesti (202410370110346)
+               - Rifky Septian Kusuma (202410370110351)
+ =========================================================
+*/
+
 public class DashboardView extends BorderPane {
 
     private Anggota loggedInUser;
@@ -31,31 +44,10 @@ public class DashboardView extends BorderPane {
         this.bukuController = new BukuController();
         this.peminjamanController = new PeminjamanController();
 
-        HBox navbar = createNavbar(stage);
+        setTop(createNavbar(stage));
         tableBuku = createTableBuku(stage);
-
-        Button btnTambah = new Button("Tambah Buku");
-        btnTambah.getStyleClass().add("btn-tambah");
-        btnTambah.setOnAction(e -> handleTambahBuku(stage));
-        btnTambah.setPrefHeight(35);
-
-        Button btnCekPinjam = new Button("Peminjaman");
-        btnCekPinjam.getStyleClass().add("btn-cekpinjam");
-        btnCekPinjam.setOnAction(e -> handleCekBuku(stage));
-        btnCekPinjam.setPrefHeight(35);
-
-        HBox bottomBar = new HBox(10, btnTambah, btnCekPinjam);
-        bottomBar.setPadding(new Insets(10));
-        bottomBar.setAlignment(Pos.CENTER_RIGHT);
-
-        if (loggedInUser.getId_anggota() != 123) {
-            btnTambah.setVisible(false);
-            btnTambah.setManaged(false);
-        }
-
-        setTop(navbar);
         setCenter(tableBuku);
-        setBottom(bottomBar);
+        setBottom(createBottomBar(stage));
 
         getStylesheets().add(getClass().getResource("/styles/dashboard.css").toExternalForm());
 
@@ -89,8 +81,30 @@ public class DashboardView extends BorderPane {
         return navbar;
     }
 
-    private TableView<Buku> createTableBuku(Stage stage) {
+    private HBox createBottomBar(Stage stage) {
+        Button btnTambah = new Button("Tambah Buku");
+        btnTambah.getStyleClass().add("btn-tambah");
+        btnTambah.setOnAction(e -> handleTambahBuku(stage));
+        btnTambah.setPrefHeight(35);
 
+        Button btnCekPinjam = new Button("Peminjaman");
+        btnCekPinjam.getStyleClass().add("btn-cekpinjam");
+        btnCekPinjam.setOnAction(e -> handleCekBuku(stage));
+        btnCekPinjam.setPrefHeight(35);
+
+        if (loggedInUser.getId_anggota() != 123) {
+            btnTambah.setVisible(false);
+            btnTambah.setManaged(false);
+        }
+
+        HBox bottomBar = new HBox(10, btnTambah, btnCekPinjam);
+        bottomBar.setPadding(new Insets(10));
+        bottomBar.setAlignment(Pos.CENTER_RIGHT);
+
+        return bottomBar;
+    }
+
+    private TableView<Buku> createTableBuku(Stage stage) {
         TableView<Buku> table = new TableView<>();
         table.getStyleClass().add("modern-table");
 
@@ -111,22 +125,14 @@ public class DashboardView extends BorderPane {
 
         TableColumn<Buku, Void> aksiCol = new TableColumn<>("Aksi");
         aksiCol.setCellFactory(col -> new TableCell<>() {
-            private final Button btnPinjam;
-            private final Button btnEdit;
-            private final Button btnDelete;
+            private final Button btnPinjam = new Button("📖");
+            private final Button btnEdit = new Button("🖉");
+            private final Button btnDelete = new Button("🗑");
             private final HBox box = new HBox(5);
 
             {
-                btnPinjam = new Button("📖");
-                btnEdit = new Button("🖉");
-                btnDelete = new Button("🗑");
-
-                int buttonWidth = 35;
-
                 for (Button btn : new Button[] { btnPinjam, btnEdit, btnDelete }) {
-                    btn.setMinWidth(buttonWidth);
-                    btn.setPrefWidth(buttonWidth);
-                    btn.setMaxWidth(buttonWidth);
+                    btn.setPrefWidth(35);
                 }
 
                 btnPinjam.getStyleClass().add("btn-pinjam");
@@ -145,7 +151,6 @@ public class DashboardView extends BorderPane {
                     setGraphic(null);
                 } else {
                     box.getChildren().clear();
-
                     Buku buku = getTableView().getItems().get(getIndex());
 
                     if ("Available".equalsIgnoreCase(buku.getStatus())) {
@@ -159,22 +164,7 @@ public class DashboardView extends BorderPane {
                     setGraphic(box);
                 }
             }
-
         });
-
-        kodeCol.getStyleClass().add("table-column");
-        judulCol.getStyleClass().add("table-column");
-        penulisCol.getStyleClass().add("table-column");
-        tahunCol.getStyleClass().add("table-column");
-        statusCol.getStyleClass().add("table-column");
-        aksiCol.getStyleClass().add("table-column");
-
-        kodeCol.setPrefWidth(100);
-        judulCol.setPrefWidth(150);
-        penulisCol.setPrefWidth(150);
-        tahunCol.setPrefWidth(120);
-        statusCol.setPrefWidth(100);
-        aksiCol.setPrefWidth(200);
 
         table.getColumns().addAll(kodeCol, judulCol, penulisCol, tahunCol, statusCol, aksiCol);
         table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
@@ -183,14 +173,12 @@ public class DashboardView extends BorderPane {
     }
 
     private void refreshTable() {
-        bukuController = new BukuController();
         ObservableList<Buku> list = FXCollections.observableArrayList(bukuController.getSemuaBuku());
         tableBuku.setItems(list);
     }
 
     private void handlePinjam(Buku buku, Stage stage) {
         int userId = loggedInUser.getId_anggota();
-
         int jumlahPinjaman = peminjamanController.hitungPeminjamanUser(userId);
 
         if (jumlahPinjaman >= 3) {
@@ -201,26 +189,20 @@ public class DashboardView extends BorderPane {
             return;
         }
 
-        PinjamBukuModal modal = new PinjamBukuModal(buku, loggedInUser, peminjamanController, bukuController);
-        modal.show(stage, this::refreshTable);
+        new PinjamBukuModal(buku, loggedInUser, peminjamanController, bukuController).show(stage, this::refreshTable);
     }
 
     private void handleEdit(Buku buku, Stage stage) {
-        System.out.println("Edit buku: " + buku.getJudul_buku());
-        UpdateBukuModal modal = new UpdateBukuModal(bukuController);
-        modal.show(stage, this::refreshTable, buku);
-        refreshTable();
+        new UpdateBukuModal(bukuController).show(stage, this::refreshTable, buku);
     }
 
     private void handleDelete(Buku buku) {
-        System.out.println("Delete buku: " + buku.getJudul_buku());
         bukuController.deleteBuku(buku.getKode_buku());
         refreshTable();
     }
 
     private void handleTambahBuku(Stage stage) {
-        AddBukuModal modal = new AddBukuModal(bukuController);
-        modal.show(stage, this::refreshTable);
+        new AddBukuModal(bukuController).show(stage, this::refreshTable);
     }
 
     private void handleCekBuku(Stage stage) {
@@ -229,10 +211,7 @@ public class DashboardView extends BorderPane {
     }
 
     private void handleLogout(Stage stage) {
-        System.out.println("Logout");
-        com.perpus.views.auth.LoginView loginView = new com.perpus.views.auth.LoginView(stage);
-        Scene loginScene = new Scene(loginView, 700, 500);
+        Scene loginScene = new Scene(new com.perpus.views.auth.LoginView(stage), 700, 500);
         stage.setScene(loginScene);
     }
-
 }

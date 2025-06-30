@@ -13,6 +13,21 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+/*
+ =========================================================
+  FILE       : AnggotaView.java
+  FITUR      : Halaman profil anggota (view dan edit data)
+  FUNGSI     : - Menampilkan data anggota yang sedang login
+               - Mengizinkan update dan delete akun anggota
+               - Navigasi ke halaman dashboard atau login
+  DIBUAT OLEH: - Muhammad Radya Iftikhar (202410370110370)
+               - Ramanda Bagus Prawobo (202410370110380)
+               - Athallah Rasyad Zaidan (202410370110361)
+               - Anggara Aribawa Paramesti (202410370110346)
+               - Rifky Septian Kusuma (202410370110351)
+ =========================================================
+*/
+
 public class AnggotaView extends BorderPane {
 
     private TextField namaField;
@@ -27,9 +42,11 @@ public class AnggotaView extends BorderPane {
         this.loggedInUser = loggedInUser;
         this.anggotaController = new AnggotaController();
 
+        // Navbar atas
         HBox navbar = createNavbar(stage);
         this.setTop(navbar);
 
+        // Kartu profil di tengah
         VBox card = createProfileCard(stage);
         StackPane cardContainer = new StackPane(card);
         cardContainer.setAlignment(Pos.CENTER);
@@ -71,6 +88,7 @@ public class AnggotaView extends BorderPane {
         Label title = new Label("Profile Anggota");
         title.getStyleClass().add("profile-title");
 
+        // Form field
         Label labelNama = new Label("Nama");
         namaField = new TextField(loggedInUser.getNama());
         namaField.getStyleClass().add("profile-input");
@@ -83,6 +101,7 @@ public class AnggotaView extends BorderPane {
         alamatField = new TextField(loggedInUser.getAlamat());
         alamatField.getStyleClass().add("profile-input");
 
+        // Tombol aksi
         updateButton = new Button("Update");
         updateButton.getStyleClass().add("btn-update");
         updateButton.setOnAction(e -> handleUpdate(stage));
@@ -103,6 +122,7 @@ public class AnggotaView extends BorderPane {
         return card;
     }
 
+    // Handler update data anggota
     private void handleUpdate(Stage stage) {
         loggedInUser.setNama(namaField.getText());
         loggedInUser.setNomor_handphone(Integer.parseInt(noHpField.getText()));
@@ -116,6 +136,7 @@ public class AnggotaView extends BorderPane {
         alert.showAndWait();
     }
 
+    // Handler hapus akun
     private void handleDelete(Stage stage) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Konfirmasi Hapus Akun");
@@ -144,5 +165,4 @@ public class AnggotaView extends BorderPane {
             }
         }
     }
-
 }

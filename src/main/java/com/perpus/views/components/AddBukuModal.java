@@ -9,6 +9,21 @@ import javafx.scene.control.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
+/*
+ =========================================================
+  FILE       : AddBukuModal.java
+  FITUR      : Modal/Form Tambah Buku
+  FUNGSI     : - Menampilkan form untuk menambahkan data buku
+               - Validasi input field
+               - Menyimpan buku baru ke database melalui BukuController
+  DIBUAT OLEH: - Muhammad Radya Iftikhar (202410370110370)
+               - Ramanda Bagus Prawobo (202410370110380)
+               - Athallah Rasyad Zaidan (202410370110361)
+               - Anggara Aribawa Paramesti (202410370110346)
+               - Rifky Septian Kusuma (202410370110351)
+ =========================================================
+*/
+
 public class AddBukuModal {
 
     private BukuController controller;
@@ -23,6 +38,7 @@ public class AddBukuModal {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setTitle("Tambah Buku");
 
+        // Form field
         Label lblTitle = new Label("Tambah Buku");
         lblTitle.getStyleClass().add("modal-title");
 
@@ -42,6 +58,7 @@ public class AddBukuModal {
         tfTahun.setPromptText("Tahun Terbit");
         tfTahun.getStyleClass().add("modal-textfield");
 
+        // Tombol simpan
         Button btnSimpan = new Button("Simpan");
         btnSimpan.getStyleClass().add("modal-button");
 
@@ -51,6 +68,7 @@ public class AddBukuModal {
             String penulis = tfPenulis.getText().trim();
             String tahunStr = tfTahun.getText().trim();
 
+            // Validasi input
             if (kode.isEmpty() || judul.isEmpty() || penulis.isEmpty() || tahunStr.isEmpty()) {
                 showAlert("Semua field harus diisi!");
                 return;
@@ -69,6 +87,7 @@ public class AddBukuModal {
                 return;
             }
 
+            // Simpan buku
             controller.tambahBuku(kode, judul, penulis, tahun);
             onSuccess.run();
             dialog.close();
@@ -85,6 +104,7 @@ public class AddBukuModal {
         dialog.showAndWait();
     }
 
+    // Tampilkan alert error
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
         alert.showAndWait();

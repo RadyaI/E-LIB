@@ -16,6 +16,22 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/*
+ =========================================================
+  FILE       : PinjamBukuModal.java
+  FITUR      : Modal Form Peminjaman Buku
+  FUNGSI     : - Menampilkan form untuk meminjam buku
+               - Validasi batas waktu peminjaman (maks 10 hari)
+               - Validasi jumlah buku yang sedang dipinjam (maks 3)
+               - Menyimpan data peminjaman & ubah status buku
+  DIBUAT OLEH: - Muhammad Radya Iftikhar (202410370110370)
+               - Ramanda Bagus Prawobo (202410370110380)
+               - Athallah Rasyad Zaidan (202410370110361)
+               - Anggara Aribawa Paramesti (202410370110346)
+               - Rifky Septian Kusuma (202410370110351)
+ =========================================================
+*/
+
 public class PinjamBukuModal {
     private final Buku buku;
     private final Anggota user;
@@ -23,7 +39,7 @@ public class PinjamBukuModal {
     private final BukuController bukuController;
 
     public PinjamBukuModal(Buku buku, Anggota user, PeminjamanController peminjamanController,
-            BukuController bukuController) {
+                           BukuController bukuController) {
         this.buku = buku;
         this.user = user;
         this.peminjamanController = peminjamanController;
@@ -70,31 +86,23 @@ public class PinjamBukuModal {
             LocalDate tglKembali = datePicker.getValue();
 
             if (tglKembali == null) {
-                Alert alert = new Alert(Alert.AlertType.WARNING, "Tanggal kembali wajib diisi.");
-                alert.setHeaderText(null);
-                alert.showAndWait();
+                showWarning("Tanggal kembali wajib diisi.");
                 return;
             }
 
             long daysBetween = ChronoUnit.DAYS.between(today, tglKembali);
             if (daysBetween < 0) {
-                Alert alert = new Alert(Alert.AlertType.WARNING, "Tanggal kembali tidak boleh sebelum hari ini.");
-                alert.setHeaderText(null);
-                alert.showAndWait();
+                showWarning("Tanggal kembali tidak boleh sebelum hari ini.");
                 return;
             }
             if (daysBetween > 10) {
-                Alert alert = new Alert(Alert.AlertType.WARNING, "Maksimal peminjaman hanya boleh 10 hari.");
-                alert.setHeaderText(null);
-                alert.showAndWait();
+                showWarning("Maksimal peminjaman hanya boleh 10 hari.");
                 return;
             }
 
             int jumlahPinjamanUser = peminjamanController.hitungPeminjamanUser(user.getId_anggota());
             if (jumlahPinjamanUser >= 3) {
-                Alert alert = new Alert(Alert.AlertType.WARNING, "Kamu sudah meminjam maksimal 3 buku.");
-                alert.setHeaderText(null);
-                alert.showAndWait();
+                showWarning("Kamu sudah meminjam maksimal 3 buku.");
                 return;
             }
 
@@ -110,9 +118,7 @@ public class PinjamBukuModal {
             bukuController.updateBuku(buku);
 
             modal.close();
-            if (onClose != null) {
-                onClose.run();
-            }
+            if (onClose != null) onClose.run();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Buku berhasil dipinjam!");
             alert.setHeaderText(null);
@@ -129,5 +135,11 @@ public class PinjamBukuModal {
 
         modal.setScene(scene);
         modal.showAndWait();
+    }
+
+    private void showWarning(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING, message);
+        alert.setHeaderText(null);
+        alert.showAndWait();
     }
 }
